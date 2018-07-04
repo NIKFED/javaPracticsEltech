@@ -134,6 +134,15 @@ public class Graph {
         }
     }
 
+    public void printAdjMatrix() { //печать матрицы инцидентности
+        for (int i = 0; i < graph.vertexSet().size(); ++i) {
+            for(int j = 0; j < graph.vertexSet().size(); ++j) {
+                System.out.print(this.adjacencyMatrix[i][j] + ", ");
+            }
+            System.out.println();
+        }
+    }
+
     public static void main(String[] args) throws IOException {
 
         Graph g = new Graph();
@@ -141,10 +150,13 @@ public class Graph {
         g.readGraph("/home/andrey/gr/inp.txt");
         g.printVertices();
         g.makeInteractionMatrix();
-        g.printIntMatrix();
+        g.makeAdjacencyMatrix();
 
-        visual gr = new visual(g.getGraph());
-        gr.setVisible(true);
+        //g.printIntMatrix();
+        //g.printAdjMatrix();
+
+        //visual gr = new visual(g.getGraph());  визуализация графа
+        //gr.setVisible(true);
 
     }
 
