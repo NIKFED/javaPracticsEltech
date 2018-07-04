@@ -14,6 +14,8 @@ public class Graph {
 
     protected double[][] interactionMatrix; //матрица инцидентности
 
+    protected double[][] adjacencyMatrix;
+
     public Graph () { //конструктор класса графа
 
         graph = new CustomUndirectedWeightedGraph<String, MyWeightedEdge>(MyWeightedEdge.class);
@@ -63,15 +65,50 @@ public class Graph {
         return matrix;
     }
 
+    public double[][] createAdjacencyMatrix(CustomUndirectedWeightedGraph<String, MyWeightedEdge> simpleG) { //создание матрицы смежности
+        HashMap<String, Integer> contributorIndex = new HashMap<String, Integer>();
+        int i = 0;
+        for (String v : simpleG.vertexSet()) {
+            contributorIndex.put(v, i);
+            i++;
+        }
+        double[][] matrix = new double[simpleG.vertexSet().size()][simpleG.vertexSet().size()];
+        for (MyWeightedEdge e : simpleG.edgeSet()) {
+            String nodeI = simpleG.getEdgeSource(e);
+            String nodeF = simpleG.getEdgeTarget(e);
+            double w = simpleG.getEdgeWeight(e);
+            int j = contributorIndex.get(nodeI);
+            int k = contributorIndex.get(nodeF);
+            if (w > 0.0) {
+                matrix[j][k] = 1;
+                matrix[k][j] = 1;
+            }
+        }
+        return matrix;
+    }
+
     public void makeInteractionMatrix() { //ну вы поняли
+
         this.interactionMatrix = this.createInteractionMatrix(this.graph);
     }
 
+    public void makeAdjacencyMatrix() { //ну вы поняли
+
+        this.adjacencyMatrix = this.createAdjacencyMatrix(this.graph);
+    }
+
     public double[][] getInteractionMatrix() {
+
         return interactionMatrix;
     }
 
+    public double[][] getAdjacencyMatrix() {
+
+        return adjacencyMatrix;
+    }
+
     public CustomUndirectedWeightedGraph<String, MyWeightedEdge> getGraph() {
+
         return graph;
     }
 
