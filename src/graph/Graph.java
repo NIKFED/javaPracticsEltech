@@ -12,9 +12,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 public class Graph {
     protected CustomUndirectedWeightedGraph <String, MyWeightedEdge> graph; //сам граф
 
-    protected double[][] interactionMatrix; //матрица инцидентности
-
-    protected double[][] adjacencyMatrix;
+    protected double[][] adjacencyMatrix; //матрица смежности
 
     public Graph () { //конструктор класса графа
 
@@ -45,7 +43,7 @@ public class Graph {
         }
     }
 
-    public double[][] createInteractionMatrix(CustomUndirectedWeightedGraph<String, MyWeightedEdge> simpleG) { //создание матрицы инцидентности
+    public double[][] createAdjacencyMatrix(CustomUndirectedWeightedGraph<String, MyWeightedEdge> simpleG) { //создание матрицы смежности
         HashMap<String, Integer> contributorIndex = new HashMap<String, Integer>();
         int i = 0;
         for (String v : simpleG.vertexSet()) {
@@ -65,41 +63,9 @@ public class Graph {
         return matrix;
     }
 
-    public double[][] createAdjacencyMatrix(CustomUndirectedWeightedGraph<String, MyWeightedEdge> simpleG) { //создание матрицы смежности
-        HashMap<String, Integer> contributorIndex = new HashMap<String, Integer>();
-        int i = 0;
-        for (String v : simpleG.vertexSet()) {
-            contributorIndex.put(v, i);
-            i++;
-        }
-        double[][] matrix = new double[simpleG.vertexSet().size()][simpleG.vertexSet().size()];
-        for (MyWeightedEdge e : simpleG.edgeSet()) {
-            String nodeI = simpleG.getEdgeSource(e);
-            String nodeF = simpleG.getEdgeTarget(e);
-            double w = simpleG.getEdgeWeight(e);
-            int j = contributorIndex.get(nodeI);
-            int k = contributorIndex.get(nodeF);
-            if (w > 0.0) {
-                matrix[j][k] = 1;
-                matrix[k][j] = 1;
-            }
-        }
-        return matrix;
-    }
-
-    public void makeInteractionMatrix() { //ну вы поняли
-
-        this.interactionMatrix = this.createInteractionMatrix(this.graph);
-    }
-
     public void makeAdjacencyMatrix() { //ну вы поняли
 
         this.adjacencyMatrix = this.createAdjacencyMatrix(this.graph);
-    }
-
-    public double[][] getInteractionMatrix() {
-
-        return interactionMatrix;
     }
 
     public double[][] getAdjacencyMatrix() {
@@ -125,15 +91,6 @@ public class Graph {
         System.out.println();
     }
 
-    public void printIntMatrix() { //печать матрицы инцидентности
-        for (int i = 0; i < graph.vertexSet().size(); ++i) {
-            for(int j = 0; j < graph.vertexSet().size(); ++j) {
-                System.out.print(this.interactionMatrix[i][j] + ", ");
-            }
-            System.out.println();
-        }
-    }
-
     public void printAdjMatrix() { //печать матрицы инцидентности
         for (int i = 0; i < graph.vertexSet().size(); ++i) {
             for(int j = 0; j < graph.vertexSet().size(); ++j) {
@@ -149,7 +106,6 @@ public class Graph {
 
         g.readGraph("/home/andrey/gr/inp.txt");
         g.printVertices();
-        g.makeInteractionMatrix();
         g.makeAdjacencyMatrix();
 
         //g.printIntMatrix();
